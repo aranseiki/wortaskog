@@ -1,0 +1,9 @@
+# PRD environment
+-r requirements.txt
+
+# DEV environment
+blue
+isort
+
+# Test environment
+pytest
