@@ -1,0 +1,24 @@
+{% extends 'core/base.html' %}
+
+{% block title %}view worklogs - Wortaskog{% endblock %}
+
+{% block content %}
+    <!-- Display Work Logs -->
+    <div class="row mt-5">
+        <div class="col-md-8 offset-md-2">
+            <h3>Work Logs: </h3>
+            <ul class="list-group">
+                {% for log in work_logs %}
+                <li class="list-group-item">
+                    <strong>Project name:</strong> {{ log.project_name }} <br />
+                    <strong>Month worked:</strong> {{ log.month_index }} <br />
+                    <strong>Date worked:</strong> {{ log.date_worked }} <br />
+                    <strong>Hours worked:</strong> {{ log.hours_worked }} <br />
+                    <strong>Task descriptions:</strong> {{ log.task_descriptions }} <br />
+                    <strong>Observations:</strong> {{ log.observations }}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}
