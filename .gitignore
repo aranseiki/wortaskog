@@ -552,6 +552,3 @@ FodyWeavers.xsd
 
 # Azure cache
 __blobstorage__/
-
-# Personal
-*[Mm]igrations*
