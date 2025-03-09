@@ -1,3 +1,6 @@
 from django.contrib import admin
+from core.models import WorkLog
 
-# Register your models here.
+
+# Register the WorkLog model
+admin.site.register(WorkLog)
