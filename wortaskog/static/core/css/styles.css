@@ -1,0 +1,47 @@
+/* CSS VARIABLES */
+/* Light theme (default) */
+:root {
+    --background-color: #ffffff; /* White */
+    --text-color: #000000; /* Black */
+    --card-background: #f8f9fa; /* Light gray */
+    --card-border: #dee2e6; /* Light gray border */
+    --header-background: #0d6efd; /* Bootstrap primary color */
+    --footer-background: #212529; /* Bootstrap dark color */
+    --footer-color: #ffffff; /* Footer text color */
+}
+
+/* Dark theme */
+[data-bs-theme="dark"] {
+    --background-color: #121212; /* Dark background */
+    --text-color: #ffffff; /* White text */
+    --card-background: #1e1e1e; /* Dark card background */
+    --card-border: #1d1919; /* Dark card border */
+    --header-background: #0a58ca; /* Darker primary color for dark theme */
+    --footer-background: #1a1a1a; /* Darker background for dark theme */
+}
+
+/* CSS "BODY" */
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+/* Header */
+header {
+    background-color: var(--header-background);
+    color: var(--text-color);
+}
+
+/* Footer */
+footer {
+    background-color: var(--footer-background);
+    color: var(--footer-color);
+}
+
+/* Card */
+.card {
+    background-color: var(--card-background);
+    border-color: var(--card-border);
+    margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
