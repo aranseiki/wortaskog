@@ -29,8 +29,9 @@
     <main class="container my-5">
         {% block content %}{% endblock %}
     </main>
+    <!-- Display footer content -->
     <footer class="text-center py-3">
-        <p class="mb-0">&copy; {% block year %} {% endblock %} Wortaskog</p>
+        <p class="mb-0">&copy; {% block year %} {{ year }} {% endblock %} Wortaskog</p>
     </footer>
 </body>
 </html>
