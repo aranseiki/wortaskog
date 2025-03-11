@@ -1,0 +1,51 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Add Work Log - Wortaskog{% endblock %}
+
+{% block content %}
+{% load static %}
+<!-- Include the form validation script -->
+<script src="{% static 'js/form-validation.js' %}"></script>
+{% load static %}
+<script src="{% static 'js/fadeout-message.js' %}"></script>
+<div class="row mt-5">
+    <div class="col-md-8 offset-md-2">
+        <h3>Add a New Work Log</h3>
+        <form method="post" class="needs-validation" novalidate>
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="mb-3">
+                <div class="row mt-5">
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}
+                        <div class="form-text">{{ field.help_text }}</div>
+                    {% endif %}
+                    {% if field.errors %}
+                        <div class="invalid-feedback">
+                            {{ field.errors|join:", " }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+            <!-- Submit button -->
+            <div class="row mt-5">
+                <button type="submit" class="btn btn-primary">Add Work Log</button>
+            </div>
+        </form>
+        <!-- Display success messages -->
+        {% if messages %}
+        <div class="row mt-5">
+            <div class="col">
+                {% for message in messages %}
+                <div id="success-message" class="alert alert-success">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

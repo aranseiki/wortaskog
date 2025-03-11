@@ -1,3 +1,4 @@
+from django import forms
 from django.db import models
 
 
@@ -24,3 +25,16 @@ class WorkLog(models.Model):
     # String representation
     def __str__(self):
         return f"{self.project_name} - {self.date_worked}"
+
+
+class WorkLogForm(forms.ModelForm):
+    class Meta:
+        model = WorkLog
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Add Bootstrap classes to form fields
+        for field_name, field in self.fields.items():
+            field.widget.attrs.update({'class': 'form-control'})

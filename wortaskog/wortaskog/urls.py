@@ -27,4 +27,9 @@ urlpatterns = [
         view=views.view_worklogs,
         name='logview',
     ),
+    path(
+        route='log/insert/',
+        view=views.insert_worklogs,
+        name='loginsert',
+    ),
 ]
