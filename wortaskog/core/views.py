@@ -59,21 +59,36 @@ def insert_worklogs(request):
 
 
 def view_worklogs(request):
-    # Get all work logs
-    work_logs = WorkLog.objects.all()
-    
-    # Get current year
     current_year = datetime.now().year
 
-    # Create the context with all objects
+    # Initialize form
+    form = WorkLogForm(request.POST or None)
+
+    # Default data: Full data for a GET request
+    work_logs = WorkLog.objects.all()  # Fetch all work logs initially
+    if request.method == 'POST':
+        # breakpoint()  # Debugging
+        # if request.POST['MyQueryInput']:  # Ensure the form has MyQueryInput
+        sql_query = request.POST.get("MyQueryInput", "").strip()
+
+        print(sql_query, '\n')  # Debugging
+
+        if (sql_query) and (sql_query.lower().startswith('select')):
+            try:
+                work_logs = WorkLog.objects.raw(sql_query)
+                request.POST = []  # Clear the POST data to avoid re-execution of the query
+            except Exception as e:
+                messages.error(request, f"SQL Error: {e}")
+        else:
+            messages.error(request, "Invalid SQL query.")  # Error message if no SQL query is entered
+        # else:
+            # print(form.errors, '\n')  # Debugging
+            # messages.error(request, "Invalid SQL query.")
+
+    # Render the page with the current data (filtered or full)
     context = {
         'year': current_year,
         'work_logs': work_logs,
     }
 
-    # render all passing object to template
-    return render(
-        request = request,
-        template_name = 'core/logview.html',
-        context = context,
-    )
+    return render(request, 'core/logview.html', context)

@@ -3,22 +3,47 @@
 {% block title %}view worklogs - Wortaskog{% endblock %}
 
 {% block content %}
-    <!-- Display Work Logs -->
-    <div class="row mt-5">
-        <div class="col-md-8 offset-md-2">
-            <h3>Work Logs: </h3>
-            <ul class="list-group">
+<div class="container mt-4">
+    <div class="row">
+        <!-- Left Side: Work Logs SQL Query Form -->
+        <div class="col-md-6">
+            <div class="mt-3">
+                <h3>Search your Work Logs: </h3>
+            </div>
+            <div class="mt-3">
+                <form method="post" class="needs-validation" novalidate>
+                    {% csrf_token %}
+                    <div class="mt-3">
+                        <textarea id="queryInput" name="MyQueryInput" rows="5" class="form-control" 
+                        placeholder="Enter your SQL query here..." title="Enter SQL query"></textarea>
+                    </div>
+                    <div class="mt-3">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>    
+            </div>
+        </div>
+
+        <!-- Right Side: Display Work Logs -->
+        <div class="col-md-6">
+            <div class="mt-3">
+                <h3>Work Logs: </h3>
+            </div>
+            <div class="mt-3">
                 {% for log in work_logs %}
-                <li class="list-group-item">
-                    <strong>Project name:</strong> {{ log.project_name }} <br />
-                    <strong>Month worked:</strong> {{ log.month_index }} <br />
-                    <strong>Date worked:</strong> {{ log.date_worked }} <br />
-                    <strong>Hours worked:</strong> {{ log.hours_worked }} <br />
-                    <strong>Task descriptions:</strong> {{ log.task_descriptions }} <br />
-                    <strong>Observations:</strong> {{ log.observations }}
-                </li>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <strong>Project name:</strong> {{ log.project_name }} <br />
+                        <strong>Month worked:</strong> {{ log.month_index }} <br />
+                        <strong>Date worked:</strong> {{ log.date_worked }} <br />
+                        <strong>Hours worked:</strong> {{ log.hours_worked }} <br />
+                        <strong>Task descriptions:</strong> {{ log.task_descriptions }} <br />
+                        <strong>Observations:</strong> {{ log.observations }}
+                    </li>
+                </ul>
                 {% endfor %}
-            </ul>
+            </div>
         </div>
     </div>
+</div>
 {% endblock %}
