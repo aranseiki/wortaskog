@@ -555,3 +555,5 @@ __blobstorage__/
 
 # Personal
 *[Mm]igrations*
+docs/examples.py
+docs/taskdaily.yaml
