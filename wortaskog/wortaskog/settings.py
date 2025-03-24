@@ -79,9 +79,16 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'database/db.sqlite3',
+    },
+    'export_view_db': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'database/export_view_db.sqlite3',
     }
 }
 
+DATABASES_ROUTERS = [
+    'wortaskog.core.export_view_db_route.WorkLogExportView'
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
