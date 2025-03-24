@@ -1,9 +1,9 @@
 from core.models import WorkLog, WorkLogForm
+from core.export_view_db_route import WorkLogExportView
 from datetime import datetime
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, StreamingHttpResponse
 from django.shortcuts import redirect, render
-
 
 def home(request):
     # Get current year
@@ -28,14 +28,18 @@ def insert_worklogs(request):
 
     # Initialize form and result_form
     form = WorkLogForm(request.POST or None)
+
+    # default value for result_form
     result_form = None
 
     # Handle form submission
     if request.method == 'POST' and form.is_valid():
         # Save the new work log to the database
         form.save()
+
         # Set the success message
         messages.success(request, 'Work log added successfully!')
+
         # Redirect to the same page to clear the form
         response = redirect('loginsert')
     else:
@@ -56,6 +60,7 @@ def insert_worklogs(request):
             context = context,
         )
 
+    # return the response to html page
     return response
 
 
@@ -69,67 +74,53 @@ def view_worklogs(request):
     form = WorkLogForm(request.POST or None)
 
     # Default data: Full data for a GET request
-    work_logs = WorkLog.objects.all()
+    work_logs = WorkLog.objects.using('default').all()
 
     # Handle form submission
     if request.method == 'POST':
-        # Variable to keep track of the filtered results for export
-        filtered_work_logs = None
+        action = request.POST.get('action', '')
+        breakpoint()
+        # Check if the 'Exportar' button was clicked
+        if action.upper() == 'RUNQUERYBUTTON':
+            # Check if the 'Run Query' button was clicked
+            sql_query = request.POST.get("MyQueryInput", "").strip()
 
-        # Check if the 'Run Query' button was clicked
-        sql_query = request.POST.get("MyQueryInput", "").strip()
-        # Check if the SQL query is a SELECT statement
-        if sql_query and sql_query.lower().startswith('select'):
-            try:
-                # Apply the SQL query to filter work logs
-                filtered_work_logs = WorkLog.objects.raw(sql_query)
-                # Update the work logs to show the filtered results
-                work_logs = filtered_work_logs
-            except Exception as e:
-                # Error message if the SQL query is invalid
-                messages.error(request, f"SQL Error: {e}")
-        else:
-            # Error message if no valid SQL query is entered
-            messages.error(request, "Invalid SQL query.")
+            # Check if the SQL query is not empty
+            if not sql_query == '':
+                # Check if the SQL query is a SELECT statement
+                if sql_query.upper().startswith('SELECT '):
+                    try:
+                        # Apply the SQL query to filter work logs
+                        filtered_work_logs = WorkLog.objects.raw(sql_query)
+
+                        # Update the work logs to show the filtered results
+                        work_logs = filtered_work_logs
+                    except Exception as e:
+                        # Error message if the SQL query is invalid
+                        messages.error(request, f"SQL Error: {e}")
+                else:
+                    # Error message if no valid SQL query is entered
+                    messages.error(request, "Invalid SQL query.")
+
+            # Clear the work logs view database
+            WorkLogExportView().export_view_db_clear()
+
+            breakpoint()
+
+            # Update the work logs view database
+            WorkLogExportView().export_view_write(work_logs)
 
         # Check if the 'Exportar' button was clicked
-        if 'exportButton' in request.POST:
+        if action.upper() == 'EXPORTBUTTON':
             # breakpoint()
-            # Export the current filtered or full work logs to a CSV file
-            filtered_work_logs = work_logs
+            # Get the filtered work logs if they exist
+            filtered_work_logs = WorkLogExportView().export_view_read()
 
-            # Create CSV response for the current filtered or full work logs
-            response = HttpResponse(content_type='text/csv')
-            # Set the CSV file name
-            response['Content-Disposition'] = 'attachment; filename="work_logs.csv"'
+            if not filtered_work_logs:
+                filtered_work_logs = WorkLog.objects.using('default').all()
 
-            # Create a CSV writer object
-            writer = csv.writer(response)
-            # Write the header row (columns)
-            writer.writerow(
-                [
-                    'Project Name',
-                    'Month Worked',
-                    'Date Worked',
-                    'Hours Worked',
-                    'Task Descriptions',
-                    'Observations'
-                ]
-            )
-
-            # Write the data rows (use filtered_work_logs to export the result of the query)
-            for log in filtered_work_logs:
-                # Write each row with the work log data
-                writer.writerow(
-                    [
-                        log.project_name,
-                        log.month_index,
-                        log.date_worked,
-                        log.hours_worked,
-                        log.task_descriptions,
-                        log.observations
-                    ]
-                )
+            # Write the data rows in the CSV file
+            response = export_worklogs_csv(filtered_work_logs)
 
             # Return the CSV file as a download
             return response
@@ -142,3 +133,34 @@ def view_worklogs(request):
 
     # Render the template with the context
     return render(request, 'core/logview.html', context)
+
+
+def generate_csv(work_logs):
+    """ Generator function for efficient CSV streaming. """
+    yield (
+        'Project Name,Month Worked,Date Worked,Hours Worked,'
+        'Task Descriptions,Observations\n'
+    )
+    for log in work_logs:
+        yield (
+            f'{log.project_name},'
+            f'{log.month_index},'
+            f'{log.date_worked},'
+            f'{log.hours_worked},'
+            f'"{log.task_descriptions}"'
+            f',"{log.observations}"'
+            f'\n'
+        )
+
+
+def export_worklogs_csv(filtered_work_logs: list):
+    """Export the work logs to a CSV file."""
+    WorkLogfile = f'work_logs_{datetime.now().strftime("%d-%m-%Y")}.csv'
+
+    response = StreamingHttpResponse(
+        generate_csv(filtered_work_logs), content_type="text/csv"
+    )
+    response['Content-Disposition'] = (
+        f'attachment; filename="{WorkLogfile}"'
+    )
+    return response
