@@ -79,7 +79,7 @@ def view_worklogs(request):
     # Handle form submission
     if request.method == 'POST':
         action = request.POST.get('action', '')
-        breakpoint()
+
         # Check if the 'Exportar' button was clicked
         if action.upper() == 'RUNQUERYBUTTON':
             # Check if the 'Run Query' button was clicked
@@ -105,14 +105,11 @@ def view_worklogs(request):
             # Clear the work logs view database
             WorkLogExportView().export_view_db_clear()
 
-            breakpoint()
-
             # Update the work logs view database
             WorkLogExportView().export_view_write(work_logs)
 
         # Check if the 'Exportar' button was clicked
         if action.upper() == 'EXPORTBUTTON':
-            # breakpoint()
             # Get the filtered work logs if they exist
             filtered_work_logs = WorkLogExportView().export_view_read()
 
