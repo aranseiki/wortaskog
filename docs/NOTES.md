@@ -23,7 +23,8 @@ templates\core\home.html
 # Special commands:
 python manage.py startapp core
 python .\manage.py runserver 8080
-python manage.py makemigrations
 python manage.py migrate
+python manage.py migrate --database=<file_name_without_extension>
+python manage.py makemigrations
 python manage.py createsuperuser
 python manage.py shell
