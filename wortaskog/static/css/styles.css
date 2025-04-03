@@ -1,47 +1,281 @@
 /* CSS VARIABLES */
-/* Light theme (default) */
 :root {
-    --background-color: #ffffff; /* White */
-    --text-color: #000000; /* Black */
-    --card-background: #f8f9fa; /* Light gray */
-    --card-border: #dee2e6; /* Light gray border */
-    --header-background: #0d6efd; /* Bootstrap primary color */
-    --footer-background: #212529; /* Bootstrap dark color */
-    --footer-color: #ffffff; /* Footer text color */
+    /* Dark Theme Colors */
+
+    /* Dark mode background color (Very dark gray) */
+    --background-color: #121212;
+
+    /* Dark mode text color (White) */
+    --text-color: #ffffff;
+
+    /* Dark mode card background color (Darker gray) */
+    --card-background: #1e1e1e;
+
+    /* Dark mode card border color (Very dark border) */
+    --card-border: #1d1919;
+
+    /* Dark mode header background color (Darker primary blue) */
+    --header-background: #0a58ca;
+
+    /* Dark mode footer background color (Very dark gray) */
+    --footer-background: #1a1a1a;
+
+    /* Dark mode navbar background color (Dark Gray) */
+    --navbar-background: #1a1a1a;
+
+    /* Dark mode navbar text color (White) */
+    --navbar-text: #ffffff;
+
+    /* Dark mode theme button text color (Dark Gray) */
+    --theme-button-text: #121212;
+
+    /* Dark mode theme button background color (White) */
+    --theme-button-background: #ffffff;
 }
 
-/* Dark theme */
-[data-bs-theme="dark"] {
-    --background-color: #121212; /* Dark background */
-    --text-color: #ffffff; /* White text */
-    --card-background: #1e1e1e; /* Dark card background */
-    --card-border: #1d1919; /* Dark card border */
-    --header-background: #0a58ca; /* Darker primary color for dark theme */
-    --footer-background: #1a1a1a; /* Darker background for dark theme */
+
+/* Light Theme Colors */
+[data-bs-theme="light"] {
+    /* Background color (White) */
+    --background-color: #f4f4f4;
+
+    /* Text color (Black) */
+    --text-color: #000000;
+
+    /* Card background color (Light gray) */
+    --card-background: #f8f9fa;
+
+    /* Card border color (Light gray border) */
+    --card-border: #dee2e6;
+
+    /* Header background color (Bootstrap primary color) */
+    --header-background: #0d6efd;
+
+    /* Footer background color (Bootstrap dark color) */
+    --footer-background: #212529;
+
+    /* Footer text color (White) */
+    --footer-color: #ffffff;
+
+    /* Navbar background color (White) */
+    --navbar-background: #ffffff;
+
+    /* Navbar text color (Dark Gray) */
+    --navbar-text: #1a1a1a;
+
+    /* Theme button text color (White) */
+    --theme-button-text: #ffffff;
+
+    /* Theme button background color (Dark Gray) */
+    --theme-button-background: #121212;
 }
 
-/* CSS "BODY" */
+/* Navbar Styling */
+nav {
+    /* Sets the navbar background color using the variable */
+    background-color: var(--navbar-background);
+
+    /* Sets the navbar text color using the variable */
+    color: var(--navbar-text);
+}
+
+/* General Styles */
 body {
+    /* Sets the background color of the page */
     background-color: var(--background-color);
+
+    /* Sets the default text color of the page */
     color: var(--text-color);
 }
 
-/* Header */
+/* Header Styling */
 header {
+    /* Sets the background color of the header */
     background-color: var(--header-background);
+
+    /* Ensures the text color is visible in both light and dark themes */
     color: var(--text-color);
 }
 
-/* Footer */
+/* Footer Styling */
 footer {
+    /* Sets the footer background color */
     background-color: var(--footer-background);
+
+    /* Sets the footer text color */
     color: var(--footer-color);
 }
 
-/* Card */
+/* Card Component */
 .card {
+    /* Sets the background color of the card */
     background-color: var(--card-background);
+
+    /* Sets the border color of the card */
     border-color: var(--card-border);
+
+    /* Adds spacing above the card */
     margin-top: 20px;
+
+    /* Adds a subtle shadow effect to the card */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Theme Switch Button */
+.theme-button {
+    /* Sets the background color of the theme switch button */
+    background-color: var(--theme-button-background);
+
+    /* Sets the text color of the theme switch button */
+    color: var(--theme-button-text);
+
+    /* Adds padding inside the button */
+    padding: 0.5rem 1rem;
+
+    /* Defines a readable font size */
+    font-size: 1rem;
+
+    /* Adds rounded corners to the button */
+    border-radius: 5px;
+
+    /* Smooth transition effects for background and text color */
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Navbar Styles */
+.navbar {
+    /* Adds padding inside the navbar */
+    padding: 0.8rem 1rem;
+
+    /* Sets a standard font size for navbar elements */
+    font-size: 1rem;
+}
+
+/* Navbar Content Distribution */
+.container-fluid {
+    /* Uses flexbox to align navbar items */
+    display: flex;
+
+    /* Aligns navbar items vertically in the center */
+    align-items: center;
+
+    /* Spreads navbar items evenly across the space */
+    justify-content: space-between;
+
+    /* Prevents navbar items from wrapping to the next line */
+    flex-wrap: nowrap;
+}
+
+/* Navbar Brand (HomePage) */
+.navbar-brand {
+    /* Increases the font size of the brand */
+    font-size: 1.25rem;
+
+    /* Makes the brand text bold */
+    font-weight: bold;
+
+    /* Adds padding around the brand text */
+    padding: 0.5rem 1rem;
+}
+
+/* Centering Navbar Menu */
+.navbar-collapse {
+    /* Allows the menu to expand and occupy available space */
+    flex-grow: 1;
+
+    /* Centers the navigation links */
+    justify-content: center;
+}
+
+/* Navbar Items Spacing */
+.navbar-nav {
+    /* Uses flexbox to arrange menu items */
+    display: flex;
+
+    /* Adds space between navigation items */
+    gap: 1rem;
+}
+
+/* Ensures Theme Toggle Button Does Not Move Down */
+#theme-toggle {
+    /* Pushes the theme toggle button to the right */
+    margin-left: auto;
+
+    /* Prevents text inside the button from wrapping */
+    white-space: nowrap;
+}
+
+/* Responsive Adjustments (Max width: 992px) */
+@media (max-width: 992px) {
+    /* Maintains Layout Structure */
+    .container-fluid {
+        /* Keeps navbar items in a single row */
+        display: flex;
+
+        /* Aligns navbar items vertically */
+        align-items: center;
+
+        /* Spreads navbar items evenly across the space */
+        justify-content: space-between;
+
+        /* Prevents navbar items from wrapping */
+        flex-wrap: nowrap;
+    }
+
+    /* Positions the Hamburger Menu Button */
+    .navbar-toggler {
+        /* Sets the order of the hamburger button to be the first element */
+        order: 1;
+    }
+
+    /* Positions HomePage Brand Next to Hamburger Menu */
+    .navbar-brand {
+        /* Sets the order of the brand name to appear after the hamburger button */
+        order: 2;
+
+        /* Adds a slight margin to the left of the brand */
+        margin-left: 10px;
+    }
+
+    /* Centers and Expands Collapsible Menu */
+    .navbar-collapse {
+        /* Sets the order of the collapsible menu */
+        order: 3;
+
+        /* Makes the menu take up the full width */
+        width: 100%;
+
+        /* Centers the text inside the collapsible menu */
+        text-align: center;
+    }
+
+    /* Stacks Navigation Items Vertically */
+    .navbar-nav {
+        /* Changes the layout to vertical */
+        flex-direction: column;
+
+        /* Centers the menu items */
+        align-items: center;
+    }
+
+    /* Ensures Each Menu Item Spans Full Width */
+    .navbar-nav .nav-item {
+        /* Makes each menu item take the full width of the menu */
+        width: 100%;
+    }
+
+    /* Fixes Theme Toggle Button to Top-Right Corner */
+    #theme-toggle {
+        /* Sets the order of the theme toggle button */
+        order: 4;
+
+        /* Positions the theme toggle button absolutely */
+        position: absolute;
+
+        /* Aligns the button to the right side */
+        right: 10px;
+
+        /* Positions the button at the top */
+        top: 10px;
+    }
 }

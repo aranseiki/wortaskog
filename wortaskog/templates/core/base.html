@@ -1,37 +1,93 @@
+<!-- Define the document type and HTML version -->
 <!DOCTYPE html>
+<!-- Start of the HTML document, setting the language to English and enabling Bootstrap dark theme -->
 <html lang="en" data-bs-theme="dark">
+
 <head>
+    <!-- Specify the character encoding for the document -->
     <meta charset="UTF-8">
+    <!-- Ensure proper rendering and touch zooming on mobile devices -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Set the page title, allowing customization with Django block -->
     <title>{% block title %}Wortaskog{% endblock %}</title>
 
-    <!-- Bootstrap CSS -->
+    <!-- Include Bootstrap CSS for styling -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom CSS -->
+    <!-- Load Django static files -->
     {% load static %}
+    <!-- Link to the custom stylesheet for additional styles -->
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+    <!-- Include Bootstrap JavaScript and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Custom JS -->
+    <!-- Load Django static files -->
     {% load static %}
+    <!-- Link to the custom JavaScript file responsible for theme toggling -->
     <script src="{% static 'js/theme-toggle.js' %}"></script>
 </head>
+
 <body>
+    <!-- Define the header section of the page -->
     <header class="text-center py-4">
+        <!-- Display the main heading of the site -->
         <h1>Welcome to Wortaskog</h1>
-        <!-- Dark/Light Mode Toggle Button -->
-        <button id="theme-toggle" class="btn btn-light">Toggle Dark Mode</button>
     </header>
+
+    <!-- Define the navigation bar -->
+    <nav class="navbar navbar-expand-lg">
+        <!-- Create a fluid container for proper spacing and alignment -->
+        <div class="container-fluid d-flex align-items-center justify-content-between">
+            <!-- Create a flexible container for the left section of the navbar -->
+            <div class="d-flex align-items-center">
+                <!-- Define the collapsible menu button (hamburger) for small screens -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <!-- Display the icon for the collapsible menu -->
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Define the homepage link positioned next to the menu button -->
+                <a class="navbar-brand ms-2" href="#">HomePage</a>
+            </div>
+
+            <!-- Define the collapsible navigation menu -->
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <!-- Create an unordered list to hold the navigation items -->
+                <ul class="navbar-nav">
+                    <!-- Define the first menu item -->
+                    <li class="nav-item">
+                        <!-- Create a navigation link that directs the user to the log insertion page -->
+                        <a class="nav-link" href="/log/insert/">Insert Log</a>
+                    </li>
+                    <!-- Define the second menu item -->
+                    <li class="nav-item">
+                        <!-- Create a navigation link that directs the user to the log viewing page -->
+                        <a class="nav-link" href="/log/view/">View Logs</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Define the theme toggle button, which remains fixed on the right -->
+            <button id="theme-toggle" class="btn btn-light theme-button">
+                <!-- Display text inside the button to indicate its functionality -->
+                <span>Toggle Dark/Light Mode</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Define the main content section of the page -->
     <main class="container my-5">
+        <!-- Use a Django block to allow dynamic content injection -->
         {% block content %}{% endblock %}
     </main>
-    <!-- Display footer content -->
+
+    <!-- Define the footer section of the page -->
     <footer class="text-center py-3">
+        <!-- Display copyright information dynamically using Django -->
         <p class="mb-0">&copy; {% block year %} {{ year }} {% endblock %} Wortaskog</p>
     </footer>
 </body>
+
 </html>
