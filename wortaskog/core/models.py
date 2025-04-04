@@ -1,9 +1,12 @@
 from django import forms
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class WorkLog(models.Model):
     # Fields
+    # User who created the work log
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     # Name of the project
     project_name = models.CharField(max_length=100)
     # Index to each month (1-12)
