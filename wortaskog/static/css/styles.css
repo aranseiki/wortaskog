@@ -259,7 +259,13 @@ footer {
     }
 
     /* Ensures Each Menu Item Spans Full Width */
-    .navbar-nav .nav-item {
+    .navbar-nav .nav-item{
+        /* Makes each menu item take the full width of the menu */
+        width: 100%;
+    }
+
+    /* Ensures Each Menu Item Spans Full Width */
+    form .btn-logout {
         /* Makes each menu item take the full width of the menu */
         width: 100%;
     }

@@ -39,35 +39,43 @@
     <nav class="navbar navbar-expand-lg">
         <!-- Create a fluid container for proper spacing and alignment -->
         <div class="container-fluid d-flex align-items-center justify-content-between">
-            <!-- Create a flexible container for the left section of the navbar -->
-            <div class="d-flex align-items-center">
-                <!-- Define the collapsible menu button (hamburger) for small screens -->
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <!-- Display the icon for the collapsible menu -->
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+            {% if user.is_authenticated %}
+                <!-- Create a flexible container for the left section of the navbar -->
+                <div class="d-flex align-items-center">
+                    <!-- Define the collapsible menu button (hamburger) for small screens -->
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <!-- Display the icon for the collapsible menu -->
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
 
-                <!-- Define the homepage link positioned next to the menu button -->
-                <a class="navbar-brand ms-2" href="/">HomePage</a>
-            </div>
+                    <!-- Define the homepage link positioned next to the menu button -->
+                    <a class="navbar-brand ms-2" href="/">HomePage</a>
+                </div>
 
-            <!-- Define the collapsible navigation menu -->
-            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-                <!-- Create an unordered list to hold the navigation items -->
-                <ul class="navbar-nav">
-                    <!-- Define the first menu item -->
-                    <li class="nav-item">
-                        <!-- Create a navigation link that directs the user to the log insertion page -->
-                        <a class="nav-link" href="/log/insert/">Insert Log</a>
-                    </li>
-                    <!-- Define the second menu item -->
-                    <li class="nav-item">
-                        <!-- Create a navigation link that directs the user to the log viewing page -->
-                        <a class="nav-link" href="/log/view/">View Logs</a>
-                    </li>
-                </ul>
-            </div>
+                <!-- Define the collapsible navigation menu -->
+                <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                    <!-- Create an unordered list to hold the navigation items -->
+                    <ul class="navbar-nav">
+                        <!-- Define the first menu item -->
+                        <li class="nav-item">
+                            <!-- Create a navigation link that directs the user to the log insertion page -->
+                            <a class="nav-link" href="/log/insert/">Insert Log</a>
+                        </li>
+                        <!-- Define the second menu item -->
+                        <li class="nav-item">
+                            <!-- Create a navigation link that directs the user to the log viewing page -->
+                            <a class="nav-link" href="/log/view/">View Logs</a>
+                        </li>
+                        <li class="nav-item">
+                            <form method="post" action="{% url 'logout' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-logout btn nav-link" style="width: 100%">Logout</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            {% endif %}
 
             <!-- Define the theme toggle button, which remains fixed on the right -->
             <button id="theme-toggle" class="btn btn-light theme-button">

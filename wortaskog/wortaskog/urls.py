@@ -33,10 +33,17 @@ urlpatterns = [
         view=views.insert_worklogs,
         name='loginsert',
     ),
-    path('login/', auth_views.LoginView.as_view(), name='login'),
+    path('login/',
+        auth_views.LoginView.as_view(
+            redirect_authenticated_user=False,
+        ),
+        name='login',
+    ),
     path(
         'logout/',
-        auth_views.LogoutView.as_view(next_page='/login/'),
+        auth_views.LogoutView.as_view(
+            next_page='/login/'
+        ),
         name='logout',
     ),
 ]

@@ -3,6 +3,7 @@ from core.export_view_db_route import WorkLogExportView
 from datetime import datetime
 from django.contrib import messages
 from django.http import HttpResponse, StreamingHttpResponse
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
 def home(request):
@@ -22,6 +23,7 @@ def home(request):
     )
 
 
+@login_required
 def insert_worklogs(request):
     # Get current year
     current_year = datetime.now().year
@@ -64,6 +66,7 @@ def insert_worklogs(request):
     return response
 
 
+@login_required
 def view_worklogs(request):
     # Import CSV module
     import csv
@@ -73,8 +76,11 @@ def view_worklogs(request):
     # Initialize form
     form = WorkLogForm(request.POST or None)
 
+    # Initialize User data
+    user = request.user
+
     # Default data: Full data for a GET request
-    work_logs = WorkLog.objects.using('default').all()
+    work_logs = WorkLog.objects.using('default').all().filter(user=user)
 
     # Handle form submission
     if request.method == 'POST':
@@ -91,7 +97,7 @@ def view_worklogs(request):
                 if sql_query.upper().startswith('SELECT '):
                     try:
                         # Apply the SQL query to filter work logs
-                        filtered_work_logs = WorkLog.objects.raw(sql_query)
+                        filtered_work_logs = WorkLog.objects.filter(user=user).raw(sql_query)
 
                         # Update the work logs to show the filtered results
                         work_logs = filtered_work_logs
@@ -103,18 +109,18 @@ def view_worklogs(request):
                     messages.error(request, "Invalid SQL query.")
 
             # Clear the work logs view database
-            WorkLogExportView().export_view_db_clear()
+            WorkLogExportView().export_view_db_clear(user = user)
 
             # Update the work logs view database
-            WorkLogExportView().export_view_write(work_logs)
+            WorkLogExportView().export_view_write(default_db_result = work_logs, user = user)
 
         # Check if the 'Exportar' button was clicked
         if action.upper() == 'EXPORTBUTTON':
             # Get the filtered work logs if they exist
-            filtered_work_logs = WorkLogExportView().export_view_read()
+            filtered_work_logs = WorkLogExportView().export_view_read(user = user)
 
             if not filtered_work_logs:
-                filtered_work_logs = WorkLog.objects.using('default').all()
+                filtered_work_logs = WorkLog.objects.using('default').all().filter(user=user)
 
             # Write the data rows in the CSV file
             response = export_worklogs_csv(filtered_work_logs)
