@@ -1,10 +1,24 @@
-from core.models import WorkLog, WorkLogForm
-from core.export_view_db_route import WorkLogExportView
+# Import the datetime class to handle date and time operations
 from datetime import datetime
+
+# Import the WorkLog model and WorkLogForm form class from the core app
+from core.models import WorkLog, WorkLogForm
+
+# Import the custom view responsible for exporting work logs
+from core.export_view_db_route import WorkLogExportView
+
+# Import Django's message framework to provide user feedback
 from django.contrib import messages
-from django.http import HttpResponse, StreamingHttpResponse
+
+# Import the decorator to enforce login requirement on views
 from django.contrib.auth.decorators import login_required
+
+# Import redirect and render functions to manage HTTP responses
 from django.shortcuts import redirect, render
+
+# Import the function responsible for exporting work logs as CSV
+from core.exporters import export_worklogs_csv
+
 
 def home(request):
     # Get current year
@@ -70,11 +84,11 @@ def insert_worklogs(request):
 def view_worklogs(request):
     # Import CSV module
     import csv
-    # Get current year
-    current_year = datetime.now().year
+    # Get current datetime
+    current_datetime = datetime.now()
 
-    # Initialize form
-    form = WorkLogForm(request.POST or None)
+    # Get current year
+    current_year = current_datetime.year
 
     # Initialize User data
     user = request.user
@@ -123,7 +137,10 @@ def view_worklogs(request):
                 filtered_work_logs = WorkLog.objects.using('default').all().filter(user=user)
 
             # Write the data rows in the CSV file
-            response = export_worklogs_csv(filtered_work_logs)
+            response = export_worklogs_csv(
+                filtered_work_logs,
+                current_datetime= current_datetime,
+            )
 
             # Return the CSV file as a download
             return response
@@ -136,34 +153,3 @@ def view_worklogs(request):
 
     # Render the template with the context
     return render(request, 'core/logview.html', context)
-
-
-def generate_csv(work_logs):
-    """ Generator function for efficient CSV streaming. """
-    yield (
-        'Project Name,Month Worked,Date Worked,Hours Worked,'
-        'Task Descriptions,Observations\n'
-    )
-    for log in work_logs:
-        yield (
-            f'{log.project_name},'
-            f'{log.month_index},'
-            f'{log.date_worked},'
-            f'{log.hours_worked},'
-            f'"{log.task_descriptions}"'
-            f',"{log.observations}"'
-            f'\n'
-        )
-
-
-def export_worklogs_csv(filtered_work_logs: list):
-    """Export the work logs to a CSV file."""
-    WorkLogfile = f'work_logs_{datetime.now().strftime("%d-%m-%Y")}.csv'
-
-    response = StreamingHttpResponse(
-        generate_csv(filtered_work_logs), content_type="text/csv"
-    )
-    response['Content-Disposition'] = (
-        f'attachment; filename="{WorkLogfile}"'
-    )
-    return response
